@@ -3,30 +3,39 @@
 @section('content')
     <div class="container">
         <h1>Daftar Tagihan</h1>
-        <table class="table">
+        
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <a href="{{ route('tagihans.create') }}" class="btn btn-primary mb-3">Tambah Tagihan</a>
+        
+        <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Pelanggan</th>
                     <th>Bulan</th>
                     <th>Tahun</th>
                     <th>Jumlah Tagihan</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($tagihans as $tagihan)
-                    <tr>
-                        <td>{{ $tagihan->pelanggan->nama }}</td>
-                        <td>{{ $tagihan->bulan }}</td>
-                        <td>{{ $tagihan->tahun }}</td>
-                        <td>Rp {{ number_format($tagihan->jumlah_tagihan, 2) }}</td>
-                        <td>{{ $tagihan->status ? 'Lunas' : 'Belum Bayar' }}</td>
-                        <td>
-                            <a href="{{ route('pembayarans.create', ['tagihan_id' => $tagihan->id]) }}" class="btn btn-primary btn-sm">Bayar</a>
-                        </td>
-                    </tr>
-                @endforeach
+            @forelse ($tagihans as $tagihan)
+                <tr>
+                    <td>{{ $tagihan->id }}</td>
+                    <td>{{ $tagihan->pelanggan->name ?? 'Pelanggan tidak ditemukan' }}</td> <!-- Assuming pelanggan relationship exists -->
+                    <td>{{ $tagihan->bulan }}</td>
+                    <td>{{ $tagihan->tahun }}</td>
+                    <td>{{ number_format($tagihan->jumlah_tagihan, 2, ',', '.') }} IDR</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">Tidak ada tagihan yang ditemukan.</td>
+                </tr>
+            @endforelse
             </tbody>
         </table>
     </div>

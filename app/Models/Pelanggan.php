@@ -8,9 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Pelanggan extends Model
 {
     use HasFactory;
-    public function tagihans()
-{
-    return $this->hasMany(Tagihan::class);
-}
 
+    // Tentukan kolom yang bisa diisi melalui mass assignment
+    protected $fillable = ['nama', 'alamat', 'nomor_telepon'];
+
+    /**
+     * Relasi dengan model Tagihan
+     */
+    public function tagihans()
+    {
+        return $this->hasMany(Tagihan::class);
+    }
 }
